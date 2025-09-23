@@ -1,5 +1,8 @@
 import pygame, sys 
- 
+import math
+from particles_syss import Particle_System
+from particles_syss import *
+import random
 clock = pygame.time.Clock()
  
 from pygame.locals import * 
@@ -20,6 +23,10 @@ grass_image.set_colorkey((255,255,255))
 dirt_image = pygame.image.load('dirt.png')
 grass_modified = pygame.transform.scale(grass_image,(transformation_size,transformation_size))
 dirt_modified = pygame.transform.scale(dirt_image,(transformation_size,transformation_size))
+gun_img = pygame.image.load("gun.png")
+
+gun_img.set_colorkey((255,255,255))
+gun_img = pygame.transform.scale(gun_img,(80,80))
 
 
 
@@ -44,8 +51,18 @@ import csv
 with open("level0_data.csv", newline="") as f:
     reader = csv.reader(f)
     data_as_list = [[int(value) for value in row] for row in reader]
+ps = Particle_System(
+        surface = screen,
+        pos_getter = pygame.mouse.get_pos,
+        color = (random.randint(20,100),random.randint(100,150),random.randint(100,200)),
+        radius_range = (5,20),
+        vel_range_x = (-1, 4),
+        vel_range_y = (-2, 2),
+        decay = 0.3
+    )
 
-print(data_as_list)
+
+
 
 def load_map(path):
     f = open(path + '.csv','r')
@@ -248,7 +265,7 @@ def draw_world():
 flip_right = False
 flip_left = False
 jump = False
-
+emit = False
 acll = 0
 while True: 
     
@@ -259,7 +276,7 @@ while True:
     tiles = []
     draw_world()
     
-    
+    mx,my = pygame.mouse.get_pos()
     
     
     
@@ -268,7 +285,7 @@ while True:
 
     player_movement = [0,0]
 
-
+    
 
     scroll[0] += (player_rect.x - scroll[0]-552)/30
     scroll[1] += (player_rect.y - scroll[1]-350)/30
@@ -324,11 +341,27 @@ while True:
 
     
     
-    
+    print(player_rect.x,player_rect.y)
     screen.blit(surf,(0,0))
+    gun_img_rect = gun_img.get_rect(center = (player_rect.x-scroll[0]+60,player_rect.y-scroll[1]+80))
     
+    if mx - gun_img_rect.x > 0:
     
+        angle_radian = math.atan((-my+gun_img_rect.y)/(mx-gun_img_rect.x))
+    if mx - gun_img_rect.x < 0:
     
+        angle_radian = 3.14- math.atan((+my-gun_img_rect.y)/(mx-gun_img_rect.x)) 
+        
+    angle_degrees = math.degrees(angle_radian)
+   
+    gun_rotate_img = pygame.transform.rotate(gun_img,angle_degrees)
+    screen.blit(gun_rotate_img,(gun_img_rect.x-(gun_img.get_width())/2,gun_img_rect.y -(gun_img.get_height())/2))
+    if pygame.mouse.get_pressed()[0] == 1:
+        emit = True
+    if emit == True:
+        #ps.emit()
+        #ps.update_and_draw()
+        pass
     for event in pygame.event.get(): 
         if event.type == QUIT: 
             pygame.quit() 
