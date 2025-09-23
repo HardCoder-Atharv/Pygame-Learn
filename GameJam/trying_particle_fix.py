@@ -6,6 +6,8 @@ from pygame.locals import *
 pygame.init()
 import random
 
+print("Enter")
+
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((1000,700),0,32)
 running = True
