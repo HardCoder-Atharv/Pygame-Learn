@@ -15,7 +15,7 @@ Tile_size = 40
 Red = (255,0,0)
 Green  = (0,255,0)
 current_tile = 0
-level = 1
+level = 0
 
 
 
@@ -47,12 +47,12 @@ screen = pygame.display.set_mode((SCREEN_WIDTH+SIDE_MARGIN,SCREEN_HEIGHT),0,32)
 img_list = []
 for i in range(26):
     if i == 25:
-        img = pygame.image.load(f"blocks/{i}.png").convert()
+        img = pygame.image.load(f"Pygame-learn/DafluffyTutorial/blocks/{i}.png").convert()
         img = pygame.transform.scale(img,(Tile_size*2.5,Tile_size*4))
         img.set_colorkey((0,0,0))
         img_list.append(img)
     else:
-        img = pygame.image.load(f"blocks/{i}.png").convert()
+        img = pygame.image.load(f"Pygame-learn/DafluffyTutorial/blocks/{i}.png").convert()
 
         img = pygame.transform.scale(img,(Tile_size,Tile_size))
         img.set_colorkey((255,255,255))
