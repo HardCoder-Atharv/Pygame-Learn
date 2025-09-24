@@ -259,7 +259,7 @@ def draw_world():
 
 
 
-    
+vx,vy = 0,0
 
 
 flip_right = False

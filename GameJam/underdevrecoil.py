@@ -258,7 +258,6 @@ def draw_world():
     
 
 
-
 vx,vy = 0,0
 
 
@@ -267,7 +266,7 @@ flip_left = False
 jump = False
 emit = False
 acll = 0
-total_momentum = 25
+total_momentum = 15
 while True: 
     
     surf = pygame.transform.scale(screen,(1400,800))
@@ -330,7 +329,7 @@ while True:
     
     if collisions['bottom']:
         if moving_up == True:
-            player_y_momentum = -35
+            player_y_momentum = -25
         else:
             player_y_momentum = 0
 
