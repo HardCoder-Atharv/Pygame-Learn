@@ -259,7 +259,7 @@ def draw_world():
 
 
 
-    
+vx,vy = 0,0
 
 
 flip_right = False
@@ -267,6 +267,7 @@ flip_left = False
 jump = False
 emit = False
 acll = 0
+total_momentum = 25
 while True: 
     
     surf = pygame.transform.scale(screen,(1400,800))
@@ -280,6 +281,7 @@ while True:
     
     
     
+    
 
 
 
@@ -287,14 +289,16 @@ while True:
 
     
 
-    scroll[0] += (player_rect.x - scroll[0]-552)/30
-    scroll[1] += (player_rect.y - scroll[1]-350)/30
+    scroll[0] += (player_rect.x - scroll[0]-552)/15
+    scroll[1] += (player_rect.y - scroll[1]-350)/15
     
     
-    player_y_momentum += 1.8
+    player_y_momentum += 1
     player_movement[1] += player_y_momentum
-    
-    
+    player_movement[0] += vx
+    vx -= 0.5
+    if vx <=0:
+        vx = 0
     
     
     if moving_right == True:
@@ -304,10 +308,10 @@ while True:
     if moving_left == True:
         player_movement[0] -= 8
         
-    if player_y_momentum > 55:
-        player_y_momentum = 55
+    if player_y_momentum > 35:
+        player_y_momentum = 35
     
-
+    
     if moving_left or moving_right:
         current_anim = player_run
 
@@ -326,7 +330,7 @@ while True:
     
     if collisions['bottom']:
         if moving_up == True:
-            player_y_momentum = -45
+            player_y_momentum = -35
         else:
             player_y_momentum = 0
 
@@ -352,9 +356,21 @@ while True:
         angle_radian = 3.14- math.atan((+my-gun_img_rect.y)/(mx-gun_img_rect.x)) 
         
     angle_degrees = math.degrees(angle_radian)
-   
+    
     gun_rotate_img = pygame.transform.rotate(gun_img,angle_degrees)
+    
+    
     screen.blit(gun_rotate_img,(gun_img_rect.x-(gun_img.get_width())/2,gun_img_rect.y -(gun_img.get_height())/2))
+    
+    
+    #recoils logic
+    if pygame.mouse.get_pressed()[0]== 1:
+
+        vx = -total_momentum*math.cos(angle_radian)
+        vy = total_momentum*math.sin(angle_radian)
+        player_y_momentum = vy
+
+    print(vx,vy)
     if pygame.mouse.get_pressed()[0] == 1:
         emit = True
     if emit == True:
